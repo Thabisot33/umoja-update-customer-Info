@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer Update Links</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 180px;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    h2 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .link {
+      margin: 8px 0;
+    }
+
+    .link a {
+      display: block;
+      background: deeppink;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.2s ease-in-out;
+    }
+
+    .link a:hover {
+      background: #c2185b;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <a href="https://umoja.network/?stay=yes"><img src="Umoja Logo Web_320x86_png.png" alt="Logo" class="logo" /></a>
+    <h2>Please type your <b>FULL NAME</b><br>as on your <b>ID or PASSPORT</b></h2>
+    <p>When typing start with your Names as they appear in you ID/Passport,<br> then followed by your Surname.</p>
+
+    <input type="text" id="searchInput" placeholder="Search full name..." onkeyup="filterLinks()" />
+
+    <div id="linkContainer"></div>
+  </div>
+
+  <script>
+    const sheetID = '1JwpWie2gQ4L23JUu27eAgep5bO83q700hvU63NMI42s';
+    const sheetName = 'Customers List';
+    const apiKey = 'AIzaSyB7KkrxEuYwukMKD_IrI26Mj6NEijnlcck';
+    const apiURL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${sheetName}?alt=json&key=${apiKey}`;
+
+    let allCustomers = [];
+
+    async function fetchCustomersAndGenerateLinks() {
+      const container = document.getElementById("linkContainer");
+
+      try {
+        const response = await fetch(apiURL);
+        const data = await response.json();
+        const rows = data.values;
+
+        if (!rows || rows.length <= 3) {
+          container.textContent = "No customer data found.";
+          return;
+        }
+
+        allCustomers = rows.slice(3).map(row => ({
+          id: row[0],
+          name: row[2] || ''
+        }));
+
+        container.innerHTML = ""; // empty display until matched
+      } catch (err) {
+        container.textContent = "Error fetching data.";
+        console.error(err);
+      }
+    }
+
+    function displayCustomers(customers) {
+      const container = document.getElementById("linkContainer");
+      container.innerHTML = "";
+
+      customers.forEach(({ id, name }) => {
+        const link = `update.html?id=${encodeURIComponent(id)}`;
+        const div = document.createElement("div");
+        div.className = "link";
+        div.innerHTML = `<a href="${link}" target="_blank">${name}</a>`;
+        container.appendChild(div);
+      });
+    }
+
+    function filterLinks() {
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase().trim();
+
+      if (searchTerm === "") {
+        document.getElementById("linkContainer").innerHTML = "";
+        return;
+      }
+
+      const filtered = allCustomers.filter(cust =>
+        cust.name.toLowerCase().trim() === searchTerm
+      );
+
+      displayCustomers(filtered);
+    }
+
+    window.onload = fetchCustomersAndGenerateLinks;
+  </script>
+</body>
+</html>

@@ -63,18 +63,48 @@
     .link a:hover {
       background: #c2185b;
     }
+
+    #searchSection {
+      display: none;
+    }
+
+    #notHomeMessage {
+      display: none;
+      
+      font-weight: bold;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="card">
-    <a href="https://umoja.network/?stay=yes"><img src="Umoja Logo Web_320x86_png.png" alt="Logo" class="logo" /></a>
-    <h2>Please type your <b>FULL NAME</b><br>as on your <b>ID or PASSPORT</b></h2>
-    <p>When typing start with your Names as they appear in you ID/Passport,<br> then followed by your Surname.<br> Make Sure that the ID/Passport 
-      is the one that was used when registering for Umoja Wifi</p>
+    <a href="https://umoja.network/?stay=yes">
+      <img src="Umoja Logo Web_320x86_png.png" alt="Logo" class="logo" />
+    </a>
+    
+    <div id="questionSection">
+      <p style="text-align: left;">
+        We're helping you update your <strong>WhatsApp number</strong>, <strong>GPS location</strong>, and <strong>home address</strong>.<br><br>
+        To make sure we capture the correct location of your WiFi installation, please open this link only when you are <strong>at home</strong>, where your WiFi device is currently set up.<br><br>
+        If you're not at home right now, kindly try again later so we can update your information accurately and ensure a smooth service experience.
+      </p>
 
-    <input type="text" id="searchInput" placeholder="Search full name..." onkeyup="filterLinks()" />
+      <h2 style="margin-top: 30px;">To continue, please confirm:</h2>
+      <p><strong>Are you currently at home where your WiFi is installed?</strong></p>
 
-    <div id="linkContainer"></div>
+      <button onclick="showSearch(true)">Yes</button>
+      <button onclick="showSearch(false)">No</button>
+    </div>
+
+
+    <div id="searchSection">
+      <h2>Please type your <b>FULL NAME</b><br>as on your <b>ID or PASSPORT</b></h2>
+      <p>When typing start with your Names as they appear in your ID/Passport,<br> then followed by your Surname.</p>
+      <input type="text" id="searchInput" placeholder="Search full name..." onkeyup="filterLinks()" />
+      <div id="linkContainer"></div>
+    </div>
+
+    <div id="notHomeMessage">Please try again when you're at home, where your WiFi is installed, so we can capture your accurate location and update your details successfully.</div>
   </div>
 
   <script>
@@ -138,7 +168,16 @@
       displayCustomers(filtered);
     }
 
-    window.onload = fetchCustomersAndGenerateLinks;
+    function showSearch(isHome) {
+      document.getElementById("questionSection").style.display = "none";
+
+      if (isHome) {
+        document.getElementById("searchSection").style.display = "block";
+        fetchCustomersAndGenerateLinks();
+      } else {
+        document.getElementById("notHomeMessage").style.display = "block";
+      }
+    }
   </script>
 </body>
 </html>

@@ -337,7 +337,7 @@
 
         const responseText = await res.text();
         if (res.ok) {
-          status.textContent = "✅ Info and address updated successfully.";
+          window.location.href = "Done.html";
         } else {
           status.textContent = "❌ Failed to update: " + responseText;
         }
@@ -377,8 +377,7 @@
         });
 
         if (res.ok) {
-          status.textContent = "✅ Address and WhatsApp updated successfully.";
-          document.getElementById("manualAddressSection").style.display = "none";
+          window.location.href = "Done.html";
         } else {
           const errorText = await res.text();
           status.textContent = "❌ Failed to update: " + errorText;

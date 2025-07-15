@@ -74,6 +74,32 @@
       font-weight: bold;
       margin-top: 20px;
     }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .button-group button {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      background-color: deeppink;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .button-group button:hover {
+      background-color: #c2185b;
+    }
+
+
+
   </style>
 </head>
 <body>
@@ -92,8 +118,10 @@
       <h2 style="margin-top: 30px;">To continue, please confirm:</h2>
       <p><strong>Are you currently at home where your WiFi is installed?</strong></p>
 
-      <button onclick="showSearch(true)">Yes</button>
-      <button onclick="showSearch(false)">No</button>
+      <div class="button-group">
+        <button onclick="showSearch(true)">Yes</button>
+        <button onclick="showSearch(false)">No</button>
+      </div>
     </div>
 
 

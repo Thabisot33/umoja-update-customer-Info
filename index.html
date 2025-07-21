@@ -126,7 +126,7 @@
 
 
     <div id="searchSection">
-      <h2>Please type your <b>FULL NAME</b><br>as on your <b>ID or PASSPORT</b></h2>
+      <h2>Please type your <b>FULL NAME</b><br>as on your <b>ID or PASSPORT</b>.</h2>
       <p>Please type your full name exactly as it appears on the ID or Passport you used to register with Umoja — 
         starting with your <b>given names</b>, followed by your <b>surname</b>.</p>
       <input type="text" id="searchInput" placeholder="Search full name..." onkeyup="filterLinks()" />
@@ -137,8 +137,8 @@
   </div>
 
   <script>
-    const sheetID = '1JwpWie2gQ4L23JUu27eAgep5bO83q700hvU63NMI42s';
-    const sheetName = 'Customers List';
+    const sheetID = '1n9IOhlus1l29XmiZZ5htu1neITYIcvMIUyEPTnpcS54';
+    const sheetName = 'Customer Data';
     const apiKey = 'AIzaSyB7KkrxEuYwukMKD_IrI26Mj6NEijnlcck';
     const apiURL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${sheetName}?alt=json&key=${apiKey}`;
 
@@ -152,14 +152,14 @@
         const data = await response.json();
         const rows = data.values;
 
-        if (!rows || rows.length <= 3) {
+        if (!rows || rows.length <= 1) {
           container.textContent = "No customer data found.";
           return;
         }
 
-        allCustomers = rows.slice(3).map(row => ({
+        allCustomers = rows.slice(1).map(row => ({
           id: row[0],
-          name: row[2] || ''
+          name: row[1] || ''
         }));
 
         container.innerHTML = ""; // empty display until matched
@@ -177,7 +177,7 @@
         const link = `update.html?id=${encodeURIComponent(id)}`;
         const div = document.createElement("div");
         div.className = "link";
-        div.innerHTML = `<a href="${link}" target="_blank">${name}</a>`;
+        div.innerHTML = `<a href="${link}">${name}</a>`;
         container.appendChild(div);
       });
     }
